@@ -1,0 +1,66 @@
+class Solution {
+public:
+	int evalRPN(vector<string>& tokens)
+	{
+		stack<int>ops;
+		int str_len = tokens.size();
+		int op1, op2;
+		stringstream stream;
+
+		for(int i = 0; i < str_len; i++)
+		{
+			string s1 = tokens[i];
+			if(s1 == "+")
+            {
+				op1 = ops.top();
+				ops.pop();
+				op2 = ops.top();
+				ops.pop();
+				ops.push(op2 + op1);
+            }
+            else if(s1 == "-")
+			{
+			    op1 = ops.top();
+				ops.pop();
+				op2 = ops.top();
+				ops.pop();
+				ops.push(op2 - op1);				
+			}
+			else if(s1 == "*")
+			{
+    			op1 = ops.top();
+				ops.pop();
+				op2 = ops.top();
+				ops.pop();
+				ops.push(op2 * op1);			    
+			}
+			else if(s1 == "/")	
+            {
+				op1 = ops.top();
+				ops.pop();
+				op2 = ops.top();
+				ops.pop();
+				if(0 == op2)
+				{
+				    op2 = 0;
+				}
+				else
+				{
+				    op2 = op2 / op1;
+				}
+				ops.push(op2);				
+            }
+            else
+            {
+				stream << s1;
+				stream >> op1;
+			    stream.clear();
+				ops.push(op1);
+			}
+		}
+
+		int answer = ops.top();
+		ops.pop();
+		return answer;
+	}
+};
