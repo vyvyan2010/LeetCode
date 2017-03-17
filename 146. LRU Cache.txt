@@ -1,0 +1,70 @@
+class pair1
+{
+public:
+	pair1 (int a, int b)
+	{
+		key = a;
+		value = b;
+	}
+
+public:	
+	int key;
+	int value;
+};
+
+
+class LRUCache {
+public:
+	LRUCache(int capacity) {
+		max_size = capacity;
+		leet.clear();
+	}
+	~LRUCache()
+	{
+		leet.clear();
+	}
+
+	int get(int key) {
+		list<pair1>::iterator it;
+		int value = -1;
+		for(it = leet.begin(); it != leet.end(); it++)
+		{
+			if(key == it->key)
+			{
+				value = it->value;
+				break;
+			}
+		}
+		if(it != leet.end())
+		{
+			pair1 tempPair(it->key, it->value);
+			leet.erase(it);
+			leet.push_front(tempPair);
+		}
+		return value;
+	}
+
+	void put(int key, int value) {
+		pair1 tempPair(key, value);
+		list<pair1>::iterator it;
+		for(it = leet.begin(); it != leet.end(); it++)
+		{
+			if(key == it->key)
+			{
+				leet.erase(it);
+				break;
+			}
+		}
+		
+		if(leet.size() >= max_size)
+		{
+			leet.pop_back();
+		}
+
+		leet.push_front(tempPair);
+	}
+
+public:
+	list<pair1> leet;
+	int max_size;
+};
