@@ -1,0 +1,88 @@
+class Solution {
+public:
+    vector<int> findSubstring(string s, vector<string>& words) {
+	    unsigned long long sum = 0, tempsum = 0;
+		vector<int> result;
+		unsigned long length = 0;
+		unsigned long StringLenth = words[0].length();
+		
+		for(int i = 0; i < words.size(); i++)
+		{
+			for(int j = 0; j < StringLenth; j++)
+			{
+				sum += chhashmap(words[i][j]);
+			}
+		}
+		
+		length = words.size() * StringLenth;
+		
+		for(int i = 0; (i < length) && (i < s.size()); i++)
+		{
+			tempsum += chhashmap(s[i]);
+		}
+		if(tempsum == sum)
+		{
+			if(0 == IsValide(s, 0, words))
+			{
+				result.push_back(0);
+			}
+		}
+		
+		for(int i = 1; i < s.size() - length + 1; i++)
+		{
+			tempsum = tempsum - chhashmap(s[i-1]) + chhashmap(s[i + length - 1]);
+			if(tempsum == sum)
+			{
+				if(0 == IsValide(s, i, words))
+				{
+					result.push_back(i);
+				}
+			}
+		}
+		
+		return result;
+    }
+	
+	unsigned int chhashmap(char ch)
+	{
+		return 2^(ch - 'a');
+	}
+	
+	int IsValide(const string& s, unsigned long pos, const vector<string>& words)
+	{
+		int WordsSize = words.size();
+		unsigned long WordsLength = words[0].length();
+		int i = 0, j = 0;
+		vector<int> VecFlag(WordsSize, 0);
+				
+		for(i = 0; i < WordsSize; i++)
+		{
+			for(j = 0; j < words.size(); j++)
+			{
+				if((-1 != VecFlag[j]) && (0 == s.compare(pos, WordsLength, words[j])))
+				{
+					VecFlag[j] = -1;
+					break;
+				}
+			}
+			if(j < WordsSize)
+			{
+				pos += WordsLength;
+			}
+			else
+			{
+				break;
+			}
+		}
+		
+		if(i >= WordsSize)
+		{
+			return 0;
+		}
+		else
+		{
+			return -1;
+		}
+	}
+	
+};
