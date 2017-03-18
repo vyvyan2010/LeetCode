@@ -1,0 +1,55 @@
+
+class Solution {
+public:
+	string addBinary(string a, string b) {
+		int PlusValue = 0;
+		int length = min(a.length(), b.length());
+		string &c = (a.length() > b.length()) ? a : b;
+		string::reverse_iterator c_it = c.rbegin();
+		string::reverse_iterator b_it = b.rbegin();
+		string::reverse_iterator a_it = a.rbegin();
+		int i;
+
+		for(i = 0; i < length; i++)
+		{
+			*c_it = *a_it - '0' + *b_it - '0' + PlusValue + '0';
+			if(*c_it == '2')
+			{
+				*c_it = '0';
+				PlusValue = 1;
+			}
+		    else if(*c_it == '3')
+			{
+				*c_it = '1';
+				PlusValue = 1;
+			}
+			else
+			{
+				PlusValue = 0;
+			}
+			c_it++;
+			a_it++;
+			b_it++;
+		}
+		for(i = length; (1 == PlusValue) && (i < c.length()); i++)
+		{
+			*c_it = *c_it + PlusValue; 
+			if(*c_it >= '2')
+			{
+				*c_it = '0';
+				PlusValue = 1;
+			}
+			else
+			{
+				PlusValue = 0;
+			}
+			c_it++;
+		}
+		if((1 == PlusValue) && (i >= c.length()))
+		{
+			c.insert(0, 1,'1');
+		}
+
+		return c;
+	}
+};
