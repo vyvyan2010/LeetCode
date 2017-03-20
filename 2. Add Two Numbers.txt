@@ -1,0 +1,68 @@
+class Solution {
+public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        int len1 = CalcListLength(l1);
+		int len2 = CalcListLength(l2);
+		(ListNode*)& NodeNickName = (len1 > len2) ? l1 : l2;
+		ListNode* TempPtr = NodeNickName;
+		ListNode* TempPtr1 = l1;
+		ListNode* TempPtr2 = l2;
+		ListNode* TempPrePtr = NULL;
+		int PlusValue = 0;
+		
+		while((TempPtr1 != NULL) && (TempPtr2 != NULL))
+		{
+			int TempVal = TempPtr1->val + TempPtr2->val + PlusValue;
+			if(TempVal >= 10)
+			{
+				TempPtr->val = TempVal - 10;
+				PlusValue = 1;
+			}
+			else
+			{
+				TempPtr->val = TempVal;
+				PlusValue = 0;
+			}
+			TempPrePtr = TempPtr;
+			TempPtr = TempPtr->next;
+			TempPtr1 = TempPtr1->next;
+			TempPtr2 = TempPtr2->next;
+		}
+		
+		while((PlusValue > 0) && (TempPtr != NULL))
+		{
+			TempPtr->val = TempPtr->val + 1;
+			if(TempPtr->val >= 10)
+			{
+				TempPtr->val = TempVal - 10;
+				PlusValue = 1;			
+			}
+			else
+			{
+				PlusValue = 0;
+			}
+			TempPrePtr = TempPtr;			
+			TempPtr = TempPtr->next;
+		}
+		
+		if(PlusValue > 0)
+		{
+			TempPrePtr->next = new ListNode(1);
+		}
+		
+		return NodeNickName;
+    }
+	
+	int CalcListLength(ListNode* headPtr)
+	{
+		int length = 0;
+		
+		while(headPtr != NULL)
+		{
+			length++;
+			headPtr = headPtr->next;
+		}
+		
+		return length;
+	}
+};
