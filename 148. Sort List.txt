@@ -1,0 +1,103 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+
+class Solution {
+public:
+    ListNode* sortList(ListNode* head) {
+        int NodeNum = 0;
+		ListNode *CurPtr = head;
+		
+		while(CurPtr != NULL)
+		{
+			NodeNum++;
+			CurPtr = CurPtr->next;
+		}
+		
+		ListNode *HeadTempPtr = new ListNode(0);
+		HeadTempPtr->next = head;
+		MergeSort(HeadTempPtr, NodeNum);
+
+		ListNode *TmpPtr = HeadTempPtr->next;
+		free(HeadTempPtr);
+		HeadTempPtr = NULL;
+
+		return TmpPtr;
+    }
+	
+	void MergeSort(ListNode *preHeadPtr, int num)
+	{
+		if((0 == num) || (1 == num))
+		{
+			return;
+		}
+		
+		int DivideNum = num/2;
+		
+
+		MergeSort(preHeadPtr, DivideNum);
+
+		ListNode *tempHeadPtr = preHeadPtr->next;
+		for(int tempNum = 1; tempNum < DivideNum; tempNum++)
+		{
+			tempHeadPtr = tempHeadPtr->next;
+		}
+
+		MergeSort(tempHeadPtr, num-DivideNum);
+		
+		ListNode* TailPtr = tempHeadPtr->next;
+		for(int tempNum = 0; tempNum < num-DivideNum; tempNum++)
+		{
+			TailPtr = TailPtr->next;
+		}	
+
+		Merge(preHeadPtr, tempHeadPtr, TailPtr, num);
+	}
+	
+	void Merge(ListNode *preHeadPtr1, ListNode *preHeadPtr2, ListNode *TailPtr, int num)
+	{
+		int list1Num = num/2;
+		int list2Num = num - num/2;
+		int i = 0, j = 0;
+		ListNode* HeadCurPtr = preHeadPtr1;
+		ListNode* Cur1Ptr = preHeadPtr1->next;
+		ListNode* Cur2Ptr = preHeadPtr2->next;
+		while(i < list1Num && j < list2Num)
+		{
+			if(Cur1Ptr->val <= Cur2Ptr->val)
+			{
+				HeadCurPtr->next = Cur1Ptr;
+				Cur1Ptr = Cur1Ptr->next;
+				i++;
+			}
+			else
+			{
+				HeadCurPtr->next = Cur2Ptr;
+				Cur2Ptr = Cur2Ptr->next;
+				j++;
+			}
+			HeadCurPtr = HeadCurPtr->next;
+		}
+		while(i >= list1Num &&  j < list2Num)
+		{
+			HeadCurPtr->next = Cur2Ptr;
+			HeadCurPtr = HeadCurPtr->next;
+			Cur2Ptr = Cur2Ptr->next;
+			j++;
+		}
+		while(j >= list2Num && i < list1Num)
+		{
+			HeadCurPtr->next = Cur1Ptr;
+			HeadCurPtr = HeadCurPtr->next;
+			Cur1Ptr = Cur1Ptr->next;
+			i++;		
+		}
+		
+		HeadCurPtr->next = TailPtr;
+	}
+};
