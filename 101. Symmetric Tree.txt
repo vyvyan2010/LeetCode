@@ -1,0 +1,77 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    bool isSymmetric(TreeNode* root) {
+		#首先中序遍历判断
+        MidOrder(root);
+		int num = MidVal.size();
+		if(num == 0)
+		{
+		    return true;
+		}
+		if(num%2 == 0)
+		{
+			return false;
+		}			
+		int MidPos = num / 2;
+		for(int i = 1; i <= MidPos; i++)
+		{
+			if(MidVal[MidPos-i] != MidVal[MidPos+i])
+			{
+				return false;
+			}
+		}
+		#再前后序遍历判断
+		PreOrder(root);
+		PostOrder(root);
+		reverse(PreVal.begin(), PreVal.end());
+		if(PreVal != PostVal)
+		{
+			return false; 
+		}
+		return true;
+    }
+	void MidOrder(TreeNode* root)
+	{
+	    if(root == NULL)
+	    {
+	        return;
+	    }
+		MidOrder(root->left);
+		MidVal.push_back(root->val);
+		MidOrder(root->right);
+	}
+	void PreOrder(TreeNode* root)
+	{
+	    if(root == NULL)
+	    {
+	        return;
+	    }
+		PreVal.push_back(root->val);		
+		PreOrder(root->left);
+		PreOrder(root->right);
+	}
+	void PostOrder(TreeNode* root)
+	{
+	    if(root == NULL)
+	    {
+	        return;
+	    }
+		PostOrder(root->left);
+		PostOrder(root->right);
+		PostVal.push_back(root->val);		
+	}
+	
+public:
+	vector<int> MidVal;
+	vector<int> PreVal;
+	vector<int> PostVal;
+};
