@@ -1,0 +1,64 @@
+class Solution {
+public:
+    int numDecodings(string s) {
+	    vector<int> Ways(s.length(), 0);
+		stringstream ss;
+		int temp, pos = 0;
+		
+		if(s.length() == 0)
+		{
+			return 0;
+		}
+		
+		Ways[0] = (s[0] == '0') ? 0 : 1;
+		
+		if(s.length() >= 2)
+		{
+			ss.clear();
+			ss << s.substr(0, 2);
+			ss >> temp;
+			if(s[1] == '0')
+			{
+			    Ways[1] = (temp > 0 && temp <27) ? 1 : 0;
+			}
+			else
+			{
+			    Ways[1] = (temp > 0 && temp <27) ? (Ways[0] + 1) : (Ways[0] + 0);
+			}
+			Ways[1] = (s[0] == '0') ? 0 : Ways[1];
+		}
+		
+		for(int i = 2; i <= s.length()-1; i++)
+		{
+			ss.clear();
+			ss << s.substr(i-1, i);
+			ss >> temp;
+			if(s[i] == '0')
+			{
+                if(temp > 0 && temp <27)
+                {
+                    Ways[i] = Ways[i-1];
+                }
+                else
+                {
+                    Ways[i] = 0;
+                }
+			}
+			else
+			{
+			    if(s[i-1] == '0')
+			    {
+			        Ways[i] = Ways[i-1]; 
+			    }
+			    else
+			    {
+			        Ways[i] = (temp > 0 && temp <27) ? (Ways[i-1] + Ways[i-2]) : (Ways[i-1]); 
+			    }
+			}
+			
+			Ways[i] = (s[0] == '0') ? 0 : Ways[i];
+		}
+		
+		return Ways[s.length()-1];
+    }
+};
