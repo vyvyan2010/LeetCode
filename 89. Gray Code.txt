@@ -1,0 +1,30 @@
+class Solution {
+public:
+    vector<int> grayCode(int n) {
+        vector<int> result;
+		if(n == 0)
+		{
+			result.push_back(0);
+		}
+		else if(n == 1)
+		{
+			result.push_back(0);
+			result.push_back(1);
+		}
+		else
+		{
+			result = grayCode(n-1);
+			vector<int> result_reverse(result);
+			vector<int>::iterator it;
+			for(it = result_reverse.begin(); it != result_reverse.end(); it++)
+			{
+				*it = *it + pow(2, n-1);
+			}
+			int num = result.size();
+			result.resize(2*result.size());
+			reverse_copy(result_reverse.begin(), result_reverse.end(), result.end()-num);
+		}
+		
+		return result;
+    }
+};
