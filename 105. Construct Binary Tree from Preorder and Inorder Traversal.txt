@@ -1,0 +1,61 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        if(preorder.size() == 0)
+        {
+            return NULL;
+        }
+        return Build(preorder, preorder.begin(), preorder.end()-1, inorder, inorder.begin(), inorder.end()-1);
+    }
+    
+    TreeNode* Build(const vector<int>& preorder, vector<int>::const_iterator pre_begin, vector<int>::const_iterator pre_end, \
+                    const vector<int>& inorder,  vector<int>::const_iterator in_begin,  vector<int>::const_iterator in_end)
+    {
+        TreeNode *FatherNode = new TreeNode(*pre_begin);
+        size_t left_child_length = 0;
+        
+        vector<int>::const_iterator key_iterator = find(in_begin, in_end, *pre_begin);
+		cout << *key_iterator <<endl;
+        //先找左子树
+        if(key_iterator == in_begin)
+        {
+            //没有左子树
+            FatherNode->left = NULL;
+        }
+        else
+        {
+            //左子树长度
+            left_child_length = key_iterator - in_begin;
+        
+            //有左子树
+            FatherNode->left = Build(preorder, pre_begin+1, pre_begin+left_child_length, inorder, in_begin, key_iterator-1);
+        }
+        
+        //再找右子树
+        if(key_iterator == in_end)
+        {
+            //没有右子树
+            FatherNode->right = NULL;
+        }
+        else
+        {
+			//cout << "pre左边界："<< *(pre_begin+left_child_length+1) << endl;
+			//cout << "pre右边界："<< *(pre_end) << endl;
+			//cout << "in左边界："<< *( key_iterator+1) << endl;
+			//cout << "in右边界："<< *(in_end) << endl;
+            //有右子树
+            FatherNode->right = Build(preorder, pre_begin+left_child_length+1, pre_end, inorder, key_iterator+1, in_end);  
+        }   
+        
+        return FatherNode;
+    }         
+};
