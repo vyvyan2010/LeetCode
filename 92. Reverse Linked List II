@@ -1,0 +1,84 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* reverseBetween(ListNode* head, int m, int n) {
+        ListNode *p = head;
+        int i = 0;
+        
+        if(head == NULL)
+        {
+            return NULL;
+        }
+        if(head->next == NULL)
+        {
+            return head;
+        }
+        if(head->next->next == NULL )
+        {
+            if(m < n)
+            {
+                p = head->next;
+                p->next = head;
+                head->next = NULL;
+                return p;          
+            }
+            else
+            {
+                return head;
+            }
+        }
+        
+        ListNode *NewAddptr = new ListNode(0);       
+        NewAddptr->next = head;
+        p = NewAddptr;
+        
+        for(i = 0; i < m - 1; i++)
+        {
+            p = p->next;
+        }   
+        
+        ListNode *StartPtr = p->next;
+        ListNode *CurPtr = p->next;
+        ListNode *NextPtr = p->next->next;
+        ListNode *NextnextPtr = NULL;
+        if(NextPtr != NULL)
+        {
+            NextnextPtr = NextPtr->next;
+        }
+        
+        for(; i < n - 1; i++)
+        {
+            NextPtr->next = CurPtr;
+            CurPtr = NextPtr;
+            NextPtr = NextnextPtr;
+            if(NextnextPtr != NULL)
+            {
+                NextnextPtr = NextnextPtr->next;
+            }
+            if(NextnextPtr == NULL)
+            {
+                break;
+            }
+        }
+        
+        if(i < n - 2)
+        {
+            NextPtr->next = CurPtr;
+            CurPtr = NextPtr;
+            NextPtr = NULL; 
+        }
+        
+        p->next = CurPtr;
+        StartPtr->next = NextPtr;
+        
+        return NewAddptr->next;
+    }
+};
+
